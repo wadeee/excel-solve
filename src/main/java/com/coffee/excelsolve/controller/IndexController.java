@@ -64,6 +64,7 @@ public class IndexController {
         inputStream.close();
         Sheet targetSheet = targetWorkbook.getSheetAt(0);
 
+        int index = 1;
         for (MultipartFile dataFile : dataFiles) {
             String dataFileName = dataFile.getOriginalFilename();
             if (dataFileName.isEmpty()) break;
@@ -87,26 +88,42 @@ public class IndexController {
                 }
             }
 
-            Row titleRow = targetSheet.getRow(2);
+            Row titleRow = targetSheet.getRow(0);
             Map<String, Integer> titleMap = new HashMap<>();
             for (Cell cell : titleRow) {
                 titleMap.put(cell.toString(), cell.getColumnIndex());
             }
 
 
-            for (Row row : targetSheet) {
-                if (row.getCell(1).toString().equals(shopNo)) {
-                    System.out.println(row.getRowNum());
-                    row.getCell(titleMap.get("基装\n报价金额")).setCellValue(dataSheet.getRow(baseCostCells.get(0).getRowIndex()+5).getCell(baseCostCells.get(0).getColumnIndex()).getNumericCellValue());
-                    row.getCell(titleMap.get("基础装修及安装工程")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+1).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
-                    row.getCell(titleMap.get("增容施工费")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+2).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
-                    row.getCell(titleMap.get("其他工程")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+3).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
-                    row.getCell(titleMap.get("建筑工程一切险")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+4).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
-                    row.getCell(titleMap.get("基装\n一审金额")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+5).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
-                    row.getCell(titleMap.get("施工面积")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+1).getCell(baseCostCells.get(1).getColumnIndex()+1).getNumericCellValue());
-                    break;
-                }
-            }
+//            for (Row row : targetSheet) {
+//                if (row.getCell(1).toString().equals(shopNo)) {
+//                    System.out.println(row.getRowNum());
+//                    row.getCell(titleMap.get("基装\n报价金额")).setCellValue(dataSheet.getRow(baseCostCells.get(0).getRowIndex()+5).getCell(baseCostCells.get(0).getColumnIndex()).getNumericCellValue());
+//                    row.getCell(titleMap.get("基础装修及安装工程")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+1).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
+//                    row.getCell(titleMap.get("增容施工费")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+2).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
+//                    row.getCell(titleMap.get("其他工程")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+3).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
+//                    row.getCell(titleMap.get("建筑工程一切险")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+4).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
+//                    row.getCell(titleMap.get("基装\n一审金额")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+5).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
+//                    row.getCell(titleMap.get("施工面积")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+1).getCell(baseCostCells.get(1).getColumnIndex()+1).getNumericCellValue());
+//                    break;
+//                }
+//            }
+
+            index ++;
+            int nextRow = targetSheet.getLastRowNum()+1;
+            targetSheet.createRow(index);
+//            System.out.println(targetSheet.createRow(index));
+//            System.out.println(titleMap.get("基装\n报价金额"));
+//            System.out.println(targetSheet.getRow(index).cell getCell(titleMap.get("基装\n报价金额")));
+            targetSheet.getRow(index).createCell(titleMap.get("店号")).setCellValue(shopNo);
+            targetSheet.getRow(index).createCell(titleMap.get("基装\n报价金额")).setCellValue(dataSheet.getRow(baseCostCells.get(0).getRowIndex()+5).getCell(baseCostCells.get(0).getColumnIndex()).getNumericCellValue());
+            targetSheet.getRow(index).createCell(titleMap.get("基础装修及安装工程")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+1).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
+            targetSheet.getRow(index).createCell(titleMap.get("增容施工费")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+2).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
+            targetSheet.getRow(index).createCell(titleMap.get("其他工程")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+3).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
+            targetSheet.getRow(index).createCell(titleMap.get("建筑工程一切险")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+4).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
+            targetSheet.getRow(index).createCell(titleMap.get("基装\n一审金额")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+5).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
+            targetSheet.getRow(index).createCell(titleMap.get("基装\n二审金额")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+5).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
+            targetSheet.getRow(index).createCell(titleMap.get("施工面积")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+1).getCell(baseCostCells.get(1).getColumnIndex()+1).getNumericCellValue());
         }
 
         FileOutputStream fileOutputStream = new FileOutputStream("D:\\" + originFileName);
