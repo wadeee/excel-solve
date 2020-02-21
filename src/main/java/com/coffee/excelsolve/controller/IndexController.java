@@ -109,11 +109,11 @@ public class IndexController {
             }
         }
 
-        FileOutputStream fileOutputStream = new FileOutputStream("D:\\" + originFileName);
+        FileOutputStream fileOutputStream = new FileOutputStream("/media/" + originFileName);
         targetWorkbook.write(fileOutputStream);
         fileOutputStream.close();
 
-        Path file = Paths.get("D:\\", originFileName);
+        Path file = Paths.get("/media/", originFileName);
         response.addHeader("Content-Disposition", "attachment; filename="+ new String(originFileName.getBytes("utf-8"),"iso-8859-1"));
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         Files.copy(file, response.getOutputStream());
