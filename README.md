@@ -1,4 +1,7 @@
 # Excel数据处理应用
+[![license-MIT](https://img.shields.io/badge/license-MIT-green?style=flat-square)](https://github.com/wadeee/luckinx/blob/master/LICENSE)
+
+
 
 解决生产中的重复数据处理问题
 
