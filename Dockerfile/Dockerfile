@@ -8,7 +8,6 @@ MAINTAINER wade wadechen@outlook.com
 
 RUN git clone https://github.com/wadeee/luckinx.git ~/luckinx\
   && cd ~/luckinx\
-  && gradle build
+  && gradle bootJar
 
-CMD cd ~/luckinx\
-  && gradle bootRun
+CMD java -jar ~/luckinx/build/libs/luckinx-1.0.jar --server.port=3001
