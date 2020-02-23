@@ -1,0 +1,7 @@
+[Unit]
+Description=luckinx
+[Service]
+TimeoutStartSec=0
+ExecStart=/bin/java -jar /root/luckinx/build/libs/luckinx-1.0.jar --server.port=3001
+[Install]
+WantedBy=multi-user.target

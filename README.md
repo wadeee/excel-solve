@@ -14,10 +14,10 @@
     docker images
     ```
 
-+ 生成并运行container映射8080端口到3001端口（3001端口可以任意更改）
++ 生成并运行container映射3001端口到3001端口（3001端口可以任意更改）
 
     ```bash
-    docker run -itd -p 3001:8080 --name=luckinx luckinx
+    docker run -itd -p 3001:3001 --name=luckinx luckinx
     ```
 
 + 打开[http://localhost:3000/]
