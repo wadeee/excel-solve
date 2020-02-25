@@ -19,8 +19,11 @@
     <v-app>
         <v-container fluid>
             <v-row>
-                <v-col cols="6">
-
+                <v-col
+                        cols="6"
+                        sm="12"
+                        md="6"
+                >
                     <v-card
                             :loading="loading"
                             class="mx-auto my-12"
@@ -80,21 +83,15 @@
         },
         methods: {
             submitA() {
-                console.log(this.originFileA)
-                console.log(this.dataFilesA)
-
                 let formData = new FormData()
 
                 formData.append("originFileA", this.originFileA)
-                console.log(formData.getAll("originFileA"))
 
                 for (let file of this.dataFilesA) {
                     formData.append("dataFilesA", file)
                 }
-                console.log(formData.getAll("dataFilesA"))
 
                 axios.post('/', formData, {responseType: 'blob'}).then(res => {
-                    console.log(res)
                     if (res.status == 200) {
                         let url = window.URL.createObjectURL(new Blob([res.data], {type: res["data"]["type"]}))
                         let link = document.createElement('a')
