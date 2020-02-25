@@ -6,7 +6,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
@@ -18,11 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -49,8 +46,8 @@ public class IndexController {
     }
 
     @PostMapping
-    public void indexPost(@RequestParam("originFile") MultipartFile originFile,
-                          @RequestParam("dataFiles") List<MultipartFile> dataFiles,
+    public void indexPost(@RequestParam("originFileA") MultipartFile originFile,
+                          @RequestParam("dataFilesA") List<MultipartFile> dataFiles,
                           ModelMap modelMap,
                           HttpServletResponse response) throws IOException {
         InputStream inputStream = originFile.getInputStream();
@@ -94,27 +91,8 @@ public class IndexController {
                 titleMap.put(cell.toString(), cell.getColumnIndex());
             }
 
-
-//            for (Row row : targetSheet) {
-//                if (row.getCell(1).toString().equals(shopNo)) {
-//                    System.out.println(row.getRowNum());
-//                    row.getCell(titleMap.get("基装\n报价金额")).setCellValue(dataSheet.getRow(baseCostCells.get(0).getRowIndex()+5).getCell(baseCostCells.get(0).getColumnIndex()).getNumericCellValue());
-//                    row.getCell(titleMap.get("基础装修及安装工程")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+1).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
-//                    row.getCell(titleMap.get("增容施工费")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+2).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
-//                    row.getCell(titleMap.get("其他工程")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+3).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
-//                    row.getCell(titleMap.get("建筑工程一切险")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+4).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
-//                    row.getCell(titleMap.get("基装\n一审金额")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+5).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
-//                    row.getCell(titleMap.get("施工面积")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+1).getCell(baseCostCells.get(1).getColumnIndex()+1).getNumericCellValue());
-//                    break;
-//                }
-//            }
-
             index ++;
-            int nextRow = targetSheet.getLastRowNum()+1;
             targetSheet.createRow(index);
-//            System.out.println(targetSheet.createRow(index));
-//            System.out.println(titleMap.get("基装\n报价金额"));
-//            System.out.println(targetSheet.getRow(index).cell getCell(titleMap.get("基装\n报价金额")));
             targetSheet.getRow(index).createCell(titleMap.get("店号")).setCellValue(shopNo);
             targetSheet.getRow(index).createCell(titleMap.get("基装\n报价金额")).setCellValue(dataSheet.getRow(baseCostCells.get(0).getRowIndex()+5).getCell(baseCostCells.get(0).getColumnIndex()).getNumericCellValue());
             targetSheet.getRow(index).createCell(titleMap.get("基础装修及安装工程")).setCellValue(dataSheet.getRow(baseCostCells.get(1).getRowIndex()+1).getCell(baseCostCells.get(1).getColumnIndex()).getNumericCellValue());
@@ -135,6 +113,5 @@ public class IndexController {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         Files.copy(file, response.getOutputStream());
         response.getOutputStream().flush();
-//        return "/index";
     }
 }
