@@ -34,7 +34,7 @@ public class IndexController {
         return "/index";
     }
 
-    @PostMapping
+    @PostMapping("/a")
     public void indexPost(@RequestParam("originFileA") MultipartFile originFile,
                           @RequestParam("dataFilesA") List<MultipartFile> dataFiles,
                           HttpServletResponse response) throws IOException {

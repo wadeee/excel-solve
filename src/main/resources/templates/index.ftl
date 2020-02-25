@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Excel Solve</title>
+    <title>XIAO ZHI</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@3.x/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
@@ -20,12 +20,11 @@
         <v-container fluid>
             <v-row>
                 <v-col
-                        cols="6"
+                        xs="12"
                         sm="12"
                         md="6"
                 >
                     <v-card
-                            :loading="loading"
                             class="mx-auto my-12"
                             max-width="374"
                     >
@@ -91,18 +90,19 @@
                     formData.append("dataFilesA", file)
                 }
 
-                axios.post('/', formData, {responseType: 'blob'}).then(res => {
-                    if (res.status == 200) {
-                        let url = window.URL.createObjectURL(new Blob([res.data], {type: res["data"]["type"]}))
-                        let link = document.createElement('a')
-                        link.style.display = 'none'
-                        link.href = url
-                        link.setAttribute('download', "xiaozhi")
-                        document.body.appendChild(link)
-                        link.click()
-                    }
-                })
+                axios.post('/a', formData, {responseType: 'blob'}).then(this.downloadFile)
             },
+            downloadFile(res) {
+                if (res.status == 200) {
+                    let url = window.URL.createObjectURL(new Blob([res.data], {type: res["data"]["type"]}))
+                    let link = document.createElement('a')
+                    link.style.display = 'none'
+                    link.href = url
+                    link.setAttribute('download', "xiaozhi")
+                    document.body.appendChild(link)
+                    link.click()
+                }
+            }
         },
     })
 
