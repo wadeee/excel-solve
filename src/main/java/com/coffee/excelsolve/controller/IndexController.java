@@ -1,15 +1,12 @@
 package com.coffee.excelsolve.controller;
 
-import com.coffee.excelsolve.service.StorageService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,14 +29,6 @@ import java.util.Map;
 @RequestMapping("/")
 public class IndexController {
 
-    private final StorageService storageService;
-
-    @Autowired
-    public IndexController(StorageService storageService) {
-        this.storageService = storageService;
-    }
-
-
     @GetMapping
     public String index() {
         return "/index";
@@ -48,7 +37,6 @@ public class IndexController {
     @PostMapping
     public void indexPost(@RequestParam("originFileA") MultipartFile originFile,
                           @RequestParam("dataFilesA") List<MultipartFile> dataFiles,
-                          ModelMap modelMap,
                           HttpServletResponse response) throws IOException {
         InputStream inputStream = originFile.getInputStream();
         String originFileName = originFile.getOriginalFilename();
