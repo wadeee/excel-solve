@@ -26,14 +26,13 @@
                 >
                     <v-card
                             class="mx-auto my-12"
-                            max-width="374"
                     >
                         <v-img
                                 height="250"
                                 src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
                         ></v-img>
 
-                        <v-card-title></v-card-title>
+                        <v-card-title>台账追加</v-card-title>
 
                         <v-card-text>
                             <v-form
@@ -42,6 +41,38 @@
                             >
                                 <v-file-input chips label="总台账" v-model="originFileA"></v-file-input>
                                 <v-file-input small-chips multiple label="分店" v-model="dataFilesA"></v-file-input>
+                                <v-btn
+                                        text
+                                        type="submit"
+                                >
+                                    submit
+                                </v-btn>
+                            </v-form>
+                        </v-card-text>
+                    </v-card>
+                </v-col>
+                <v-col
+                        xs="12"
+                        sm="12"
+                        md="6"
+                >
+                    <v-card
+                            class="mx-auto my-12"
+                    >
+                        <v-img
+                                height="250"
+                                src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                        ></v-img>
+
+                        <v-card-title>个别项目更新</v-card-title>
+
+                        <v-card-text>
+                            <v-form
+                                    ref="formB"
+                                    @submit.prevent="submitB"
+                            >
+                                <v-file-input chips label="总台账" v-model="originFileB"></v-file-input>
+                                <v-file-input small-chips multiple label="分店" v-model="dataFilesB"></v-file-input>
                                 <v-btn
                                         text
                                         type="submit"
@@ -79,6 +110,8 @@
         data: {
             originFileA: null,
             dataFilesA: null,
+            originFileB: null,
+            dataFilesB: null,
         },
         methods: {
             submitA() {
@@ -91,6 +124,17 @@
                 }
 
                 axios.post('/a', formData, {responseType: 'blob'}).then(this.downloadFile)
+            },
+            submitB() {
+                let formData = new FormData()
+
+                formData.append("originFileB", this.originFileB)
+
+                for (let file of this.dataFilesB) {
+                    formData.append("dataFilesB", file)
+                }
+
+                axios.post('/b', formData, {responseType: 'blob'}).then(this.downloadFile)
             },
             downloadFile(res) {
                 if (res.status == 200) {
