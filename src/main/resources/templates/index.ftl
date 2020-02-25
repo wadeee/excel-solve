@@ -32,7 +32,7 @@
                                 src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
                         ></v-img>
 
-                        <v-card-title>台账追加</v-card-title>
+                        <v-card-title>基装</v-card-title>
 
                         <v-card-text>
                             <v-form
@@ -58,13 +58,14 @@
                 >
                     <v-card
                             class="mx-auto my-12"
+                            disabled
                     >
                         <v-img
                                 height="250"
                                 src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
                         ></v-img>
 
-                        <v-card-title>个别项目更新</v-card-title>
+                        <v-card-title>增项</v-card-title>
 
                         <v-card-text>
                             <v-form
