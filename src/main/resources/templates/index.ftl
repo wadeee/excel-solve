@@ -39,7 +39,7 @@
                                     ref="formA"
                                     @submit.prevent="submitA"
                             >
-                                <v-file-input chips label="总台账" v-model="originFileA"></v-file-input>
+                                <v-file-input chips label="空白台账" v-model="originFileA"></v-file-input>
                                 <v-file-input small-chips multiple label="分店" v-model="dataFilesA"></v-file-input>
                                 <v-btn
                                         text
@@ -58,7 +58,6 @@
                 >
                     <v-card
                             class="mx-auto my-12"
-                            disabled
                     >
                         <v-img
                                 height="250"
@@ -72,7 +71,7 @@
                                     ref="formB"
                                     @submit.prevent="submitB"
                             >
-                                <v-file-input chips label="总台账" v-model="originFileB"></v-file-input>
+                                <v-file-input chips label="增项台账" v-model="originFileB"></v-file-input>
                                 <v-file-input small-chips multiple label="分店" v-model="dataFilesB"></v-file-input>
                                 <v-btn
                                         text
