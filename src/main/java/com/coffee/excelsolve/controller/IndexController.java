@@ -136,7 +136,7 @@ public class IndexController {
         InputStream inputStream = file.getInputStream();
         String originFileName = file.getOriginalFilename();
         Workbook workbook;
-        if (originFileName.substring(originFileName.indexOf(".")).equals(".xls")) {
+        if (originFileName.substring(originFileName.lastIndexOf(".")).equals(".xls")) {
             workbook = new HSSFWorkbook(inputStream);
         } else {
             workbook = new XSSFWorkbook(inputStream);
