@@ -1,10 +1,7 @@
 package com.coffee.excelsolve.controller;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -99,7 +96,7 @@ public class IndexController {
             for (Row row : dataSheet) {
                 for (Cell cell : row) {
                     if (cell.toString().equals("（五）工程总造价")) {
-                        baseCostCells.add(row.getCell(cell.getColumnIndex()+8));
+                        baseCostCells.add(row.getCell(cell.getColumnIndex() + 8));
                     }
                 }
             }
@@ -111,20 +108,24 @@ public class IndexController {
             }
 
             for (Row row : targetSheet) {
-                if (row.getLastCellNum()>titleMap.get("店号") && row.getCell(titleMap.get("店号")).getStringCellValue().equals(shopNo)) {
-                    Cell cell1 = row.getCell(titleMap.get("增项\n报价金额"));
-                    Cell cell2 = row.getCell(titleMap.get("增项\n一审金额"));
-                    Cell cell3 = row.getCell(titleMap.get("增项\n二审金额"));
-                    if (cell2.getNumericCellValue() != cell3.getNumericCellValue()) return;
+                if (row.getLastCellNum() > titleMap.get("店号")) {
+                    Cell cell = row.getCell(titleMap.get("店号"));
+                    if (cell.getCellTypeEnum().equals(CellType.NUMERIC) && String.valueOf((int) cell.getNumericCellValue()).equals(shopNo) ||
+                            cell.getCellTypeEnum().equals(CellType.STRING) && cell.getStringCellValue().equals(shopNo)) {
+                        Cell cell1 = row.getCell(titleMap.get("增项\n报价金额"));
+                        Cell cell2 = row.getCell(titleMap.get("增项\n一审金额"));
+                        Cell cell3 = row.getCell(titleMap.get("增项\n二审金额"));
+                        if (cell2.getNumericCellValue() != cell3.getNumericCellValue()) return;
 
-                    double num1 = cell1.getNumericCellValue();
-                    double num2 = cell2.getNumericCellValue();
-                    double num3 = cell3.getNumericCellValue();
+                        double num1 = cell1.getNumericCellValue();
+                        double num2 = cell2.getNumericCellValue();
+                        double num3 = cell3.getNumericCellValue();
 
-                    cell1.setCellValue(num1 + baseCostCells.get(0).getNumericCellValue());
-                    cell2.setCellValue(num2 + baseCostCells.get(1).getNumericCellValue());
-                    cell3.setCellValue(num3 + baseCostCells.get(1).getNumericCellValue());
-                    break;
+                        cell1.setCellValue(num1 + baseCostCells.get(0).getNumericCellValue());
+                        cell2.setCellValue(num2 + baseCostCells.get(1).getNumericCellValue());
+                        cell3.setCellValue(num3 + baseCostCells.get(1).getNumericCellValue());
+                        break;
+                    }
                 }
             }
         }
