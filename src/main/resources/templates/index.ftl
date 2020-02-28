@@ -29,7 +29,7 @@
                     >
                         <v-img
                                 height="250"
-                                src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+                                src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
                         ></v-img>
 
                         <v-card-title>基装</v-card-title>
