@@ -20,7 +20,7 @@
     docker run -itd -p 3001:3001 --name=luckinx luckinx
     ```
 
-+ 打开[http://localhost:3000/]
++ 打开[http://localhost:3001/]
 
     - 没有浏览器的情况下可以用curl打开查看是否正常运行
   
