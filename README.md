@@ -7,7 +7,7 @@
 
 ## Docker下运行
 
-+ 进入Dockerfile目录，构建image并查看镜像是否生成
++ 进入项目目录，构建image并查看镜像是否生成
 
     ```bash
     docker build -t luckinx ./Dockerfile
