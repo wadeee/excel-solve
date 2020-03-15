@@ -17,10 +17,10 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
@@ -46,6 +46,12 @@ public class IndexController {
             Workbook dataWorkbook = fileToWorkbook(dataFile);
             Sheet dataSheet = dataWorkbook.getSheetAt(0);
 
+            Row titleRow = targetSheet.getRow(0);
+            Map<String, Integer> titleMap = new HashMap<>();
+            for (Cell cell : titleRow) {
+                titleMap.put(cell.toString(), cell.getColumnIndex());
+            }
+
             List<Cell> baseCostCells = new ArrayList<>();
             for (Row row : dataSheet) {
                 for (Cell cell : row) {
@@ -53,12 +59,6 @@ public class IndexController {
                         baseCostCells.add(cell);
                     }
                 }
-            }
-
-            Row titleRow = targetSheet.getRow(0);
-            Map<String, Integer> titleMap = new HashMap<>();
-            for (Cell cell : titleRow) {
-                titleMap.put(cell.toString(), cell.getColumnIndex());
             }
 
             index++;
@@ -84,7 +84,12 @@ public class IndexController {
         Workbook targetWorkbook = fileToWorkbook(originFile);
         Sheet targetSheet = targetWorkbook.getSheetAt(0);
 
-        int index = 1;
+        Row titleRow = targetSheet.getRow(0);
+        Map<String, Integer> titleMap = new HashMap<>();
+        for (Cell cell : titleRow) {
+            titleMap.put(cell.toString(), cell.getColumnIndex());
+        }
+
         for (MultipartFile dataFile : dataFiles) {
             String dataFileName = dataFile.getOriginalFilename();
             if (dataFileName.isEmpty()) break;
@@ -99,12 +104,6 @@ public class IndexController {
                         baseCostCells.add(row.getCell(cell.getColumnIndex() + 8));
                     }
                 }
-            }
-
-            Row titleRow = targetSheet.getRow(0);
-            Map<String, Integer> titleMap = new HashMap<>();
-            for (Cell cell : titleRow) {
-                titleMap.put(cell.toString(), cell.getColumnIndex());
             }
 
             for (Row row : targetSheet) {
@@ -128,6 +127,76 @@ public class IndexController {
                     }
                 }
             }
+        }
+
+        workbookToResponse(targetWorkbook, response);
+    }
+
+    @PostMapping("/c")
+    public void fileC(@RequestParam("originFileC") MultipartFile originFile,
+                      @RequestParam("dataFilesC") List<MultipartFile> dataFiles,
+                      HttpServletResponse response) throws IOException, ParseException {
+        Workbook targetWorkbook = fileToWorkbook(originFile);
+        Sheet targetSheet = targetWorkbook.getSheet("咖啡&小鹿茶-运营后");
+
+        Row titleRow = targetSheet.getRow(0);
+        Map<String, Integer> titleMap = new HashMap<>();
+        for (Cell cell : titleRow) {
+            titleMap.put(cell.toString(), cell.getColumnIndex());
+        }
+
+        int nowRowIndex = 2;
+        while (!targetSheet.getRow(nowRowIndex).getCell(titleMap.get("城市")).getStringCellValue().isEmpty() ||
+                !targetSheet.getRow(nowRowIndex).getCell(titleMap.get("店名")).getStringCellValue().isEmpty() ||
+                !targetSheet.getRow(nowRowIndex).getCell(titleMap.get("审核人")).getStringCellValue().isEmpty()) {
+            nowRowIndex++;
+        }
+        System.out.println(nowRowIndex);
+
+        for (MultipartFile dataFile : dataFiles) {
+            String dataFileName = dataFile.getOriginalFilename();
+            if (dataFileName.isEmpty()) break;
+            String shopNo = dataFileName.substring(dataFileName.indexOf("(") + 1, dataFileName.indexOf(")"));
+            List<Integer> dashPos = new ArrayList<>();
+            dashPos.add(dataFileName.indexOf("-"));
+            for (int i = 0; i < 4; i++) {
+                dashPos.add(dataFileName.indexOf("-", dashPos.get(i) + 1));
+            }
+            String city = dataFileName.substring(dashPos.get(0) + 1, dashPos.get(1));
+            String shopName = dataFileName.substring(dashPos.get(1) + 1, dashPos.get(2));
+            boolean isFix = dataFileName.substring(dashPos.get(2) + 1, dashPos.get(3)).indexOf("维修") >= 0;
+            DateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+            Date updateDate = fmt.parse(dataFileName.substring(dashPos.get(3) + 1, dashPos.get(4)));
+
+            Workbook dataWorkbook = fileToWorkbook(dataFile);
+            Sheet dataSheet = dataWorkbook.getSheetAt(0);
+
+            List<Cell> baseCostCells = new ArrayList<>();
+            for (Row row : dataSheet) {
+                for (Cell cell : row) {
+                    if (cell.toString().equals("合计金额")) {
+                        baseCostCells.add(row.getCell(cell.getColumnIndex() + 8));
+                    }
+                }
+            }
+
+            Row nowRow = targetSheet.getRow(nowRowIndex);
+            nowRow.getCell(titleMap.get("门店编号")).setCellValue(shopNo);
+            nowRow.getCell(titleMap.get("日期")).setCellValue(updateDate);
+            nowRow.getCell(titleMap.get("城市")).setCellValue(city);
+            nowRow.getCell(titleMap.get("店名")).setCellValue(shopName);
+
+            if (isFix) {
+                nowRow.getCell(titleMap.get("维修\n报价金额")).setCellValue(baseCostCells.get(0).getNumericCellValue());
+                nowRow.getCell(titleMap.get("维修\n一审金额")).setCellValue(baseCostCells.get(1).getNumericCellValue());
+                nowRow.getCell(titleMap.get("维修\n二审金额")).setCellValue(baseCostCells.get(1).getNumericCellValue());
+            } else {
+                nowRow.getCell(titleMap.get("改造\n报价金额")).setCellValue(baseCostCells.get(0).getNumericCellValue());
+                nowRow.getCell(titleMap.get("改造\n一审金额")).setCellValue(baseCostCells.get(1).getNumericCellValue());
+                nowRow.getCell(titleMap.get("改造\n二审金额")).setCellValue(baseCostCells.get(1).getNumericCellValue());
+            }
+
+            nowRowIndex++;
         }
 
         workbookToResponse(targetWorkbook, response);

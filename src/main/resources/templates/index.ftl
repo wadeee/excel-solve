@@ -23,6 +23,7 @@
                         xs="12"
                         sm="12"
                         md="6"
+                        lg="4"
                 >
                     <v-card
                             class="mx-auto my-12"
@@ -55,6 +56,7 @@
                         xs="12"
                         sm="12"
                         md="6"
+                        lg="4"
                 >
                     <v-card
                             class="mx-auto my-12"
@@ -73,6 +75,39 @@
                             >
                                 <v-file-input chips label="增项台账" v-model="originFileB"></v-file-input>
                                 <v-file-input small-chips multiple label="分店" v-model="dataFilesB"></v-file-input>
+                                <v-btn
+                                        text
+                                        type="submit"
+                                >
+                                    submit
+                                </v-btn>
+                            </v-form>
+                        </v-card-text>
+                    </v-card>
+                </v-col>
+                <v-col
+                        xs="12"
+                        sm="12"
+                        md="6"
+                        lg="4"
+                >
+                    <v-card
+                            class="mx-auto my-12"
+                    >
+                        <v-img
+                                height="250"
+                                src="https://cdn.vuetifyjs.com/images/cards/house.jpg"
+                        ></v-img>
+
+                        <v-card-title>改造维修</v-card-title>
+
+                        <v-card-text>
+                            <v-form
+                                    ref="formC"
+                                    @submit.prevent="submitC"
+                            >
+                                <v-file-input chips label="台账" v-model="originFileC"></v-file-input>
+                                <v-file-input small-chips multiple label="分店" v-model="dataFilesC"></v-file-input>
                                 <v-btn
                                         text
                                         type="submit"
@@ -112,6 +147,8 @@
             dataFilesA: null,
             originFileB: null,
             dataFilesB: null,
+            originFileC: null,
+            dataFilesC: null,
         },
         methods: {
             submitA() {
@@ -135,6 +172,17 @@
                 }
 
                 axios.post('/b', formData, {responseType: 'blob'}).then(this.downloadFile)
+            },
+            submitC() {
+                let formData = new FormData()
+
+                formData.append("originFileC", this.originFileC)
+
+                for (let file of this.dataFilesC) {
+                    formData.append("dataFilesC", file)
+                }
+
+                axios.post('/c', formData, {responseType: 'blob'}).then(this.downloadFile)
             },
             downloadFile(res) {
                 if (res.status == 200) {
