@@ -151,7 +151,6 @@ public class IndexController {
                 !targetSheet.getRow(nowRowIndex).getCell(titleMap.get("审核人")).getStringCellValue().isEmpty()) {
             nowRowIndex++;
         }
-        System.out.println(nowRowIndex);
 
         for (MultipartFile dataFile : dataFiles) {
             String dataFileName = dataFile.getOriginalFilename();
@@ -174,8 +173,8 @@ public class IndexController {
             List<Cell> baseCostCells = new ArrayList<>();
             for (Row row : dataSheet) {
                 for (Cell cell : row) {
-                    if (cell.toString().equals("合计金额")) {
-                        baseCostCells.add(row.getCell(cell.getColumnIndex() + 8));
+                    if (cell.toString().equals("报价须知：")) {
+                        baseCostCells.add(dataSheet.getRow(row.getRowNum()-1).getCell(cell.getColumnIndex() + 9));
                     }
                 }
             }
