@@ -2,7 +2,6 @@ plugins {
     id 'org.springframework.boot' version '2.1.7.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'java'
-    id 'war'
 }
 
 group = 'com.coffee'
@@ -16,13 +15,6 @@ configurations {
 }
 
 repositories {
-    maven {
-        url 'https://maven.aliyun.com/repository/public/'
-    }
-    maven {
-        url 'https://maven.aliyun.com/repository/spring/'
-    }
-    mavenLocal()
     mavenCentral()
 }
 
@@ -31,7 +23,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compile group: 'org.apache.poi', name: 'poi', version: '3.17'
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
